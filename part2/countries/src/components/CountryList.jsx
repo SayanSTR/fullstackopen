@@ -8,10 +8,6 @@ const CountryList = ({ countries, filter }) => {
         .includes(filter.toLowerCase()))
         .map(country => {return {...country, visible: false}});
 
-  const clickHandler = (id) => {
-    console.log('clickHandler :: ', id)
-  }
-
   if (filter === '') {
     return (<></>);
   }
@@ -25,7 +21,7 @@ const CountryList = ({ countries, filter }) => {
     return <Country country={filteredCountries[0]} />;
   }
   return filteredCountries.map(country => {
-    return <CountryItem country={country} key={country.cca2} clickHandler={clickHandler} />;
+    return <CountryItem key={country.cca3} country={country}/>;
   });
 }
 
