@@ -3,6 +3,8 @@ const morgan = require('morgan')
 
 const app = express()
 
+app.use(express.static('dist'))
+
 app.use(express.json())
 
 
@@ -46,7 +48,7 @@ let persons = [
 ]
 
 function generateId() {
-	return Math.floor(Math.random() * 1000000000000);
+	return String(Math.floor(Math.random() * 1000000000000));
 }
 
 app.get('/info', (req, res) => {
@@ -72,9 +74,11 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.delete('/api/persons/:id', (req, res) => {
+	console.log(`Persons: {}`, persons)
 	const id = req.params.id
 	persons = persons.filter(person => person.id !== id)
 	res.status(204).end()
+	console.log(`Persons: {}`, persons)
 })
 
 app.post('/api/persons', (req, res) => {
@@ -99,8 +103,12 @@ app.post('/api/persons', (req, res) => {
 	res.status(201).json(persons[persons.length - 1])
 })
 
+const unknownEndpoint = (req, res) => {
+	res.status(404).send({error: 'unknown endpoint!'})
+}
+app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`)
 })
