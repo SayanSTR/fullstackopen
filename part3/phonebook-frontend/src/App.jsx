@@ -18,11 +18,10 @@ const App = () => {
 
   const hook = () => {
     console.log('Calling Effect Hook...')
-    const responseHandler = persons => {
+    personService.getAll().then(persons => {
       console.log('Fetched persons: ', persons)
       setPersons(persons)
-    }
-    personService.getAll().then(responseHandler)
+    })
   }
 
   useEffect(hook, [])
