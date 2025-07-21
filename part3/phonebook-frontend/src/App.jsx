@@ -14,7 +14,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [notif, setNotif] = useState({type:null, msg:null})
+  const [notif, setNotif] = useState({ type: null, msg: null })
 
   const hook = () => {
     console.log('Calling Effect Hook...')
@@ -28,23 +28,16 @@ const App = () => {
 
 
   const showAddedNotification = (name) => {
-    setNotif({type:'success', msg:`Added ${name}`})
+    setNotif({ type: 'success', msg: `Added ${name}` })
     setTimeout(() => {
-      setNotif({type:null,msg:null})
+      setNotif({ type: null, msg: null })
     }, 5000)
   }
 
   const showDeletedNotification = (name) => {
-    setNotif({type:'error', msg:`Deleted ${name}`})
+    setNotif({ type: 'error', msg: `Deleted ${name}` })
     setTimeout(() => {
-      setNotif({type:null,msg:null})
-    }, 5000)
-  }
-
-  const showAlreadyDeletedNotification = (name) => {
-    setNotif({type:'error', msg:`Information of ${name} has already been removed from server`})
-    setTimeout(() => {
-      setNotif({type:null,msg:null})
+      setNotif({ type: null, msg: null })
     }, 5000)
   }
 
@@ -69,9 +62,11 @@ const App = () => {
               setNewNumber('')
             })
             .catch(error => {
-              console.log(error.toString())
-              showAlreadyDeletedNotification(updatedPerson.name)
-              setPersons(persons.filter(person => person.id !== updatedPerson.id))
+              console.log(error.response.data.error)
+              setNotif({ type: 'error', msg: error.response.data.error})
+              setTimeout(() => {
+                setNotif({ type: null, msg: null })
+              }, 5000)
             })
         }
       }
@@ -83,6 +78,13 @@ const App = () => {
           showAddedNotification(newPerson.name)
           setNewName('')
           setNewNumber('')
+        })
+        .catch(error => {
+          console.log(error.response.data.error)
+          setNotif({ type: 'error', msg: error.response.data.error })
+          setTimeout(() => {
+            setNotif({ type: null, msg: null })
+          }, 5000)
         })
     }
   }
